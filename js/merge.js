@@ -69,9 +69,6 @@ function mergeData(prospects, contracts) {
 
             'DATA DO CADASTRO':
                 prospect['Data do cadastro'] ||
-                '',
-
-            'DATA ATIVAÇÃO':
                 contract['Data ativação'] ||
                 ''
         }
