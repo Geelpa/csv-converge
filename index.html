@@ -49,54 +49,10 @@
 
         </div>
 
-        <div class="bg-blue-50 rounded-2xl p-6 mb-8">
-            <h2 class="text-xl font-semibold mb-4">
-                O que será gerado
-            </h2>
-
-            <div class="grid md:grid-cols-2 gap-4 text-sm">
-                <div class="bg-white rounded-xl p-4 shadow-sm">
-                    ✔ Consolidação automática dos IDs
-                </div>
-
-                <div class="bg-white rounded-xl p-4 shadow-sm">
-                    ✔ Identificação de contratos
-                </div>
-
-                <div class="bg-white rounded-xl p-4 shadow-sm">
-                    ✔ Inclusão do plano vendido
-                </div>
-
-                <div class="bg-white rounded-xl p-4 shadow-sm">
-                    ✔ Ticket médio
-                </div>
-
-                <div class="bg-white rounded-xl p-4 shadow-sm">
-                    ✔ Ranking de planos vendidos
-                </div>
-
-                <div class="bg-white rounded-xl p-4 shadow-sm">
-                    ✔ Exportação da planilha final
-                </div>
-            </div>
-        </div>
-
         <button onclick="generateReport()"
             class="w-full bg-black hover:bg-gray-800 text-white py-4 rounded-2xl text-lg font-semibold transition-all">
             Gerar Planilha Consolidada
         </button>
-
-        <div class="mt-8 bg-gray-50 rounded-2xl p-6 text-sm text-gray-600">
-            <h3 class="font-semibold mb-2">Fluxo ideal</h3>
-
-            <ol class="list-decimal ml-5 space-y-2">
-                <li>Exportar os relatórios do sistema</li>
-                <li>Enviar os dois arquivos</li>
-                <li>O sistema cruza os IDs automaticamente</li>
-                <li>A planilha final é gerada</li>
-            </ol>
-        </div>
-
     </div>
 
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
