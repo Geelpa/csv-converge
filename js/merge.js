@@ -1,83 +1,117 @@
-function mergeData(prospects, contracts) {
+function mergeData(
+    prospects,
+    contracts
+) {
 
     const prospectsMap = {}
     const contractsMap = {}
 
     prospects.forEach(p => {
-        prospectsMap[normalizeValue(p.ID)] = p
+
+        const id =
+            normalizeValue(p.ID)
+
+        prospectsMap[id] = p
+
     })
 
     contracts.forEach(c => {
-        contractsMap[normalizeValue(c.ID)] = c
+
+        const id =
+            normalizeValue(c.ID)
+
+        contractsMap[id] = c
+
     })
 
     const allIds = new Set([
-        ...Object.keys(prospectsMap),
-        ...Object.keys(contractsMap)
+
+        ...prospects.map(
+            p => normalizeValue(p.ID)
+        ),
+
+        ...contracts.map(
+            c => normalizeValue(c.ID)
+        )
+
     ])
 
-    return Array.from(allIds).map(id => {
+    return Array
+        .from(allIds)
+        .map(id => {
 
-        const prospect = prospectsMap[id] || {}
-        const contract = contractsMap[id] || {}
+            const prospect =
+                prospectsMap[id] || {}
 
-        const hasContract = !!contract.ID
+            const contract =
+                contractsMap[id] || {}
 
-        return {
-
-            ID:
+            const hasContract =
                 contract.ID ||
-                prospect.ID ||
-                '',
+                contract['Plano de venda']
 
-            RAZÃO:
-                contract.Razão ||
-                prospect.Razão ||
-                '',
+            const merged = {
 
-            'TELEFONE CELULAR':
-                prospect['Telefone celular'] ||
-                '',
+                ...prospect,
+                ...contract
 
-            'CANAL DE VENDA':
-                contract['Canal de venda'] ||
-                prospect['Canal de venda'] ||
-                '',
+            }
 
-            CAMPANHA:
-                contract.Campanha ||
-                prospect.Campanha ||
-                '',
+            merged['Plano de venda'] =
 
-            VENDEDOR:
-                contract.Vendedor ||
-                prospect.Vendedor ||
-                '',
-
-            STATUS:
-                contract.Status ||
-                prospect.Status ||
-                (hasContract ? 'Vencemos' : ''),
-
-            'DESCRIÇÃO PERDEMOS':
-                prospect['Descrição perdemos'] ||
-                '',
-
-            PLANO:
                 contract['Plano de venda'] ||
-                '',
+                prospect['Plano de venda'] ||
+                ''
 
-            'DATA DO CADASTRO':
+            merged['Data do Cadastro'] =
+
+                // CONTRATO
+                contract['Data Cadastro'] ||
+                contract['Data de Cadastro'] ||
+                contract['Data do cadastro'] ||
+
+                // PROSPECT
+                prospect['Data Cadastro'] ||
+                prospect['Data de Cadastro'] ||
                 prospect['Data do cadastro'] ||
+
+                // FALLBACK ATIVAÇÃO
+                contract['Data Ativação'] ||
                 contract['Data ativação'] ||
-                '',
+                contract['Data de Ativação'] ||
 
-            'Contrato Gerado':
-                contract['ativo'] ||
-                '',
+                prospect['Data Ativação'] ||
+                prospect['Data ativação'] ||
+                prospect['Data de Ativação'] ||
 
-        }
+                ''
 
-    })
+            merged['Status'] =
+                hasContract
+                    ? 'Vencemos'
+                    : (
+                        merged['Status'] || ''
+                    )
+
+            merged['Contrato Gerado'] =
+                hasContract
+                    ? 'Sim'
+                    : 'Não'
+
+            // REMOVE TODAS AS VARIAÇÕES
+            delete merged['Data do cadastro']
+            delete merged['Data de cadastro']
+
+            delete merged['Data Ativação']
+            delete merged['Data ativação']
+            delete merged['Data de Ativação']
+            delete merged['Data Ativação']
+            delete merged['Data de Ativação']
+
+            delete merged['Plano Vendido']
+
+            return merged
+
+        })
 
 }
