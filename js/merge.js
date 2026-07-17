@@ -1,41 +1,44 @@
 function mergeData(prospects, contracts) {
-    const prospectsMap = {}
-    const contractsMap = {}
+    const prospectsMap = new Map();
+    const contractsMap = new Map();
 
+    // 1. Mapeia os dados salvando as linhas originais
     prospects.forEach(p => {
-        const id = normalizeValue(p.ID)
-        prospectsMap[id] = p
-    })
+        if (p.ID) prospectsMap.set(normalizeValue(p.ID), p);
+    });
 
     contracts.forEach(c => {
-        const id = normalizeValue(c.ID)
-        contractsMap[id] = c
-    })
+        if (c.ID) contractsMap.set(normalizeValue(c.ID), c);
+    });
 
-    const allIds = new Set([
-        ...prospects.map(p => normalizeValue(p.ID)),
-        ...contracts.map(c => normalizeValue(c.ID))
-    ])
+    const allIds = new Set([...prospectsMap.keys(), ...contractsMap.keys()]);
 
+    // 2. Monta o objeto final SEM a propriedade "Vendedor"
     return Array.from(allIds).map(id => {
-        const prospect = prospectsMap[id] || {}
-        const contract = contractsMap[id] || {}
-        const hasContract = !!(contract.ID || contract['Plano de venda'])
+        const p = prospectsMap.get(id) || {};
+        const c = contractsMap.get(id) || {};
+
+        const hasContract = !!(c.ID || c['Plano de venda']);
 
         return {
-            'ID': id || '',
-            'Razão': prospect['Razão'] || contract['Razão'] || '',
-            'Telefone celular': prospect['Telefone celular'] || contract['Telefone celular'] || '',
-            'Canal de venda': prospect['Canal de venda'] || contract['Canal de venda'] || '',
-            'Campanha de venda': prospect['Campanha de venda'] || contract['Campanha de venda'] || '',
-            'Vendedor': prospect['Vendedor'] || contract['Vendedor'] || '',
-            'Status': hasContract ? 'Vencemos' : (prospect['Status'] || ''),
-            'Motivo perdemos': prospect['Motivo perdemos'] || '',
-            'Data do cadastro': prospect['Data do cadastro'] || prospect['Data Cadastro'] || '',
-            'Plano de venda': contract['Plano de venda'] || '',
-            'Valor do plano': contract['Valor do plano'] || '',
-            'Taxa de ativação': contract['Taxa de ativação'] || '',
-            'Data ativação': contract['Data ativação'] || contract['Data Ativação'] || ''
-        }
-    })
+            'ID': id,
+            'Razão': c['Razão'] || p['Razão'] || '',
+            'Telefone celular': c['Telefone celular'] || p['Telefone celular'] || '',
+            'Canal de venda': c['Canal de venda'] || p['Canal de venda'] || '',
+            'Campanha de venda': c['Campanha de venda'] || p['Campanha de venda'] || '',
+
+            // Aqui entram EXCLUSIVAMENTE as duas opções que você precisa:
+            'Vendedor Prospect': p['Vendedor Prospect'] || p['Vendedor'] || '',
+            'Vendedor Contrato': c['Vendedor Contrato'] || c['Vendedor'] || '',
+
+            'Status': hasContract ? 'Vencemos' : (p['Status'] || ''),
+            'Contrato Gerado': hasContract ? 'Sim' : 'Não',
+            'Motivo perdemos': p['Motivo perdemos'] || '',
+            'Data do cadastro': p['Data do cadastro'] || '',
+            'Plano de venda': c['Plano de venda'] || '',
+            'Valor do plano': c['Valor do plano'] || '',
+            'Taxa de ativação': c['Taxa de ativação'] || '',
+            'Data ativação': c['Data ativação'] || ''
+        };
+    });
 }

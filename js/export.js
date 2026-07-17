@@ -4,7 +4,7 @@ function exportCSV(data) {
     // Cabeçalhos ordenados exatamente como você precisa
     const headers = [
         'ID', 'Razão', 'Telefone celular', 'Canal de venda', 'Campanha de venda',
-        'Vendedor', 'Status', 'Motivo perdemos', 'Data do cadastro',
+        'Vendedor Prospect', 'Vendedor Contrato', 'Status', 'Motivo perdemos', 'Data do cadastro',
         'Plano de venda', 'Valor do plano', 'Taxa de ativação', 'Data ativação'
     ];
 
