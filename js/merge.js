@@ -20,16 +20,15 @@ function mergeData(prospects, contracts) {
 
         const hasContract = !!(c.ID || c['Plano de venda']);
 
+        const vendedor = c['Vendedor Contrato'] || c['Vendedor'] || p['Vendedor Prospect'] || p['Vendedor'] || '';
+
         return {
             'ID': id,
             'Razão': c['Razão'] || p['Razão'] || '',
             'Telefone celular': c['Telefone celular'] || p['Telefone celular'] || '',
             'Canal de venda': c['Canal de venda'] || p['Canal de venda'] || '',
             'Campanha de venda': c['Campanha de venda'] || p['Campanha de venda'] || '',
-
-            // Aqui entram EXCLUSIVAMENTE as duas opções que você precisa:
-            'Vendedor Prospect': p['Vendedor Prospect'] || p['Vendedor'] || '',
-            'Vendedor Contrato': c['Vendedor Contrato'] || c['Vendedor'] || '',
+            'Vendedor': vendedor,
 
             'Status': hasContract ? 'Vencemos' : (p['Status'] || ''),
             'Contrato Gerado': hasContract ? 'Sim' : 'Não',
